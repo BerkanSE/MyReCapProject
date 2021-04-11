@@ -22,6 +22,7 @@ namespace DataAccess.Concrete.EntityFramework
                              join cu in context.Customers on r.CustomerId equals cu.CustomerId
                              join u in context.Users on cu.UserId equals u.UserId
                              join cl in context.Colors on c.ColorId equals cl.ColorId
+                             
                              select new CarRentalDetailDto
                              {
                                  RentalId = r.RentalId,
@@ -31,7 +32,8 @@ namespace DataAccess.Concrete.EntityFramework
                                  CompanyName = cu.CompanyName,
                                  DailyPrice = c.DailyPrice,
                                  RentDate = r.RentDate,
-                                 ReturnDate = r.ReturnDate  
+                                 ReturnDate = r.ReturnDate,
+                                 UserName = $"{u.FirstName} {u.LastName}",
                              };
                 return result.ToList();
             }

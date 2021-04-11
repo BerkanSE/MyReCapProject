@@ -1,7 +1,8 @@
 ﻿using Core.Entities.Concrete;
 using Core.Extensions;
 using Core.Utilities.Security.Encryption;
-using Microsoft.Extensions.Configuration; //IConfiguration
+using Microsoft.Extensions.Configuration;
+//IConfiguration
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -15,16 +16,21 @@ namespace Core.Utilities.Security.JWT
     public class JwtHelper : ITokenHelper
     {
         public IConfiguration Configuration { get; }
-        //IConfiguration: API'mizdeki appsetting.json okumaya yarar
+        //Read-only
+        //IConfiguration: WebAPI'mizdeki appsetting.json **okumaya** yarar
         private TokenOptions _tokenOptions;
         
         private DateTime _accessTokenExpiration;
         //Access token geçersizleşmesi
+        
+        //ctor yapısı
         public JwtHelper(IConfiguration configuration)
         {
             Configuration = configuration; //injection
+            
             _tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
             //Section : WebAPI'de Appsetting.json'ın içindeki her süslü parantezle ayrılan alana denir.
+            //TokenOptions section'daki bilgiyi alıp TokenOptions nesnesine aktarır.
         }
 
         //ITokenHelper method
@@ -32,7 +38,11 @@ namespace Core.Utilities.Security.JWT
         {
             _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
             //10 dk ekledik
+            
+            //Standart kod olduğu için SecurityKeyHelper class'ı oluşturduk. (IdentityModel'dan gelir.)
+            // var securityKey = new SymetricSecurityKey(Encoding.UTF8.GetBytes(_tokenOptions.SecurityKey))
             var securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey);
+            
             var signingCredentials = SigningCredentialsHelper.CreateSigningCredentials(securityKey);
             var jwt = CreateJwtSecurityToken(_tokenOptions, user, signingCredentials, operationClaims);
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -32,6 +33,9 @@ namespace WebAPI.Controllers
             //Dependency Chain : Bağımlılık zinciri 
             //Constructor injection ile dependency chain çözülebilir.(Like CarManager
             //ICarService carService = new CarManager(new EfCarDal());
+
+            Thread.Sleep(4000);
+
             var result = _carService.GetAll();
             if (result.Success)
             {
@@ -68,6 +72,9 @@ namespace WebAPI.Controllers
 
         public IActionResult GetCarDetails()
         {
+
+            Thread.Sleep(3000);
+
             var result = _carService.GetCarDetails();
             if (result.Success)
             {
@@ -76,6 +83,38 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
+        [HttpGet("getdetailbybrandid")]
+        public IActionResult GetDetailByBrandId(int brandId)
+        {
+            var result = _carService.GetCarDetailsByBrandId(brandId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getdetailbycolorid")]
+        public IActionResult GetDetailByColorId(int colorId)
+        {
+            var result = _carService.GetCarDetailsByColorId(colorId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getdetailbybrandandcolorid")]
+        public IActionResult GetDetailByColorIdandBrandId(int brandId, int colorId)
+        {
+            var result = _carService.GetCarDetailsByBrandAndColorId(brandId, colorId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
 
         [HttpPost("add")]
         public IActionResult Add(Car car)
@@ -103,6 +142,28 @@ namespace WebAPI.Controllers
         public IActionResult Update(Car car)
         {
             var result = _carService.Update(car);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getcarbycarid")]
+        public IActionResult GetCarByCarId(int carId)
+        {
+            var result = _carService.GetCarByCarId(carId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getcardetailsbycarid")]
+        public IActionResult GetCarDetailsByCarId(int carId)
+        {
+            var result = _carService.GetCarDetailsByCarId(carId);
             if (result.Success)
             {
                 return Ok(result);

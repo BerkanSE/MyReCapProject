@@ -16,7 +16,7 @@ namespace Business.ValidationRules.FluentValidation
             RuleFor(u => u.LastName).NotEmpty();
             RuleFor(u => u.LastName).MinimumLength(2);
             RuleFor(u => u.Email).NotEmpty();
-            RuleFor(u => u.Email).EmailAddress().WithMessage("The text entered is not a valid email address.").When(i => !string.IsNullOrEmpty(i.Email));
+            //RuleFor(u => u.Email).EmailAddress().WithMessage("The text entered is not a valid email address.").When(i => !string.IsNullOrEmpty(i.Email));
         }
         
     }
